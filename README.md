@@ -52,11 +52,17 @@ void on() {
    Serial.begin(31250);//MIDI Baud rate 31250, use 9600 for testing
 ```
 
-6. After programming, I bought some components from https://www.digikey.com/ which is a great place for small electronics projects. I partially followed Amanda's instructables guide and wired up the circuit for my pedal
+6. After programming, I bought some components from https://www.digikey.com/ which is a great place for small electronics projects. The full BOM is very small:
+- 1 250 Ohm resistor
+- 1 MIDI jack
+- 1 1/4" TS jack
+- 1 Arduino (I used an UNO)
+
+7. I partially followed Amanda's instructables guide for the MIDI jack and wired up the circuit for my pedal:
 
 # ![alt text](https://github.com/bji219/Arduino-MIDI-Pedal/blob/main/circuit.png)
 
-- Not shown: The simple other part of the circuit connects to a 2-pin TS jack. Be sure to include a pull-down resistor to avoid noise (or just use Pin 13 on the Arduino which has a built in pull-down circuit). 
+- Not shown: The simple other part of the circuit connects to a 2-pin TS jack. One pin goes to an input on the Arduino and one pin goes to ground. Be sure to include a pull-down resistor to avoid noise (or just use Pin 13 on the Arduino which has a built in pull-down circuit). 
 - The TS jack is where the footswitch pedal connects to the Arduino. It sends the on/off signal to the program. 
 
 7. Lastly, I designed a simple case and 3D printed it to house the hardware components.
