@@ -5,10 +5,63 @@
 https://www.instructables.com/Send-and-Receive-MIDI-with-Arduino/
 
 1. This project began as a way to address a gap in functionality in my Korg SV-2 keyboard. There is a footswitch pedal which can change the Leslie speaker effect when you are playing organ. However, there is no way to assign other FX to the pedal. For istance, I play EP more than organ so I like using the Tremolo effect. A-la Chick Corea it would be cool to turn the Tremolo on and off at different points as I am playing. I am sure other keyboards out there could have assignable effects pedals, but being an engineer I decided to solve this the hard way. 
-2. First, I began by looking into the SV-2 user manual to see which MIDI parameters could be edited.
-3. 
+2. First, I found the MIDI parameters that I was interested in which could be edited in the SV-2 manual:
 
-## The Finished Product
+# ![alt text](https://github.com/bji219/Arduino-MIDI-Pedal/blob/main/midi_img.png)
+
+3. After some research these were converted into Hexidecimal messages which could be sent to the keyboard using the Arduino script.
+```
+noteOn(0xBE, 0x67, 0x7F); 
+/* Toggle Pre-FX On/Off; 
+  Initial message (0xBE), some note value (103, which is 0x67), low velocity (0x00)
+*/
+```
+
+4. This was sent to my "noteOn" function which Serial.writes the data to the SV-2 (excerpt below):
+
+```
+// plays a MIDI note
+void noteOn(int cmd, int pitch, int velocity) {
+  //Serial.write(func);
+  Serial.write(cmd);
+  Serial.write(pitch);
+  Serial.write(velocity);
+ 
+}
+
+void on() {
+  
+  if (programchange == 0) {
+    noteOn(0xBE, 0x67, 0x7F); //Toggle Pre-FX On/Off 
+  } else if (programchange == 1) {
+    noteOn(0xBE, 0x68, 0x7F); //Toggle Amp On/Off
+  } else if (programchange == 2) {
+    noteOn(0xBE, 0x69, 0x7F); //Toggle Modulation On/Off
+  } else if (programchange == 3) {
+    noteOn(0xBE, 0x70, 0x7F); //Toggle Ambient On/Off
+  } else if (programchange == 4) {
+    programchange = 0; //cycle back to the beginning
+    noteOn(0xBE, 0x67, 0x7F); //Toggle Pre-FX On/Off
+  }
+}
+```
+
+5. Make sure to set the Baud Rate correctly at the beginning of your script
+```
+// Set MIDI baud rate:
+   Serial.begin(31250);//MIDI Baud rate 31250, use 9600 for testing
+```
+
+6. After programming, I bought some components from https://www.digikey.com/ which is a great place for small electronics projects. I partially followed Amanda's instructables guide and wired up the circuit for my pedal
+
+# ![alt text](https://github.com/bji219/Arduino-MIDI-Pedal/blob/main/circuit.png)
+
+- Not shown: The simple other part of the circuit connects to a 2-pin TS jack. Be sure to include a pull-down resistor to avoid noise (or just use Pin 13 on the Arduino which has a built in pull-down circuit). 
+- The TS jack is where the footswitch pedal connects to the Arduino. It sends the on/off signal to the program. 
+
+7. Lastly, I designed a simple case and 3D printed it to house the hardware components.
+
+## The Finished Product!
 # ![alt text](https://github.com/bji219/Arduino-MIDI-Pedal/blob/main/IMG_9829.JPG)
 
 ### Let me know if you have any improvement ideas!
