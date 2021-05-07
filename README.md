@@ -13,7 +13,7 @@ https://www.instructables.com/Send-and-Receive-MIDI-with-Arduino/
 ```
 noteOn(0xBE, 0x67, 0x7F); 
 /* Toggle Pre-FX On/Off; 
-  Initial message (0xBE), some note value (103, which is 0x67), low velocity (0x00)
+  Initial message (0xBE), some note value (103, which is 0x67), high velocity (0x7F)
 */
 ```
 
